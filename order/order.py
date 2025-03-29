@@ -68,7 +68,7 @@ class OrderResource(Resource):
             data = request.json
             skuCode = data["skuCode"]
             quantity = data["quantity"]
-            price = data["price"]
+            # price = data["price"]
           
             if checkInventory(skuCode,quantity):
                 # Create a new product
@@ -132,8 +132,9 @@ api.add_resource(OrderResource,'/orders','/orders/<int:id>')
 
 def checkInventory(skuCode,quantity):
     try:
-        service_invetory_url = "http://localhost:8003/inventory"
-        response = requests.get(service_invetory_url) # GET method .get
+        # service_invetory_url = "http://localhost:8003/inventory"
+        inventory_address = requests.get(f"{DISCOVERY_SERVER_URL}/discover/inventory_service")
+        response = requests.get(f"{inventory_address.json()}/inventory") # GET method .get
         response.raise_for_status()  # Raises an exception if the HTTP request returned an error (4xx/5xx).
         inventory = response.json()  # Parses the JSON and converts it into a Python dictionary or list response and stores it in the `inventory` variable.
         found = False
